@@ -13,7 +13,7 @@ from agent_desktop.protocol import Fault, decode, identifier, text, MAX_PROMPT, 
 
 async def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument('--provider', choices=['grokbot', 'hermes', 'example'], default='grokbot')
+    parser.add_argument('--provider', choices=['grokbot', 'hermes', 'example', 'openbot'], default='grokbot')
     args = parser.parse_args()
     payload = decode(sys.stdin.buffer.read(MAX_FRAME + 1))
     params = dict(agentId=identifier(payload.get('botId')), requestId=identifier(payload.get('askId')),
