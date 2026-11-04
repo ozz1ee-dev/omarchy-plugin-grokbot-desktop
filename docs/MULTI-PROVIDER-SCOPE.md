@@ -13,6 +13,8 @@ One installed Omarchy companion can show and talk to Grok bots, Hermes profiles 
 
 First demonstrable slice: a Grok bot and a Hermes profile with the same display name coexist; a message, reply, draft and unread indicator remain attached to the correct agent when switching between them. One unavailable provider leaves the other usable.
 
+Fork note: an experimental OpenBot provider using OpenBot's Local scripts API is implemented on `feature/openbot-local-scripts`; it is not part of this upstream scope or its milestones.
+
 This is a desktop integration project. Agent runtimes continue to own their memory, credentials, tools and execution policies.
 
 ## Scope boundaries

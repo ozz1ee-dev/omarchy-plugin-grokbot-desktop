@@ -6,13 +6,20 @@
 
 A floating desktop companion for Omarchy: pick a bot, ask a question, and keep working beside its reply. Sync names and avatar styles from the Grok Bot desktop app, then connect a webhook routine for real bot replies or use an authenticated local coding agent.
 
+**This is a fork.** [ozz1ee-dev/omarchy-plugin-grokbot-desktop](https://github.com/ozz1ee-dev/omarchy-plugin-grokbot-desktop) is based on [tcballard/omarchy-plugin-grokbot-desktop](https://github.com/tcballard/omarchy-plugin-grokbot-desktop) and adds an experimental OpenBot provider. The OpenBot work lives on the `feature/openbot-local-scripts` branch; the rest of the companion is shared with upstream.
+
 - Make it yours with 14 avatar shapes, 11 colours, pointer-following eyes, and adjustable motion, size and placement.
 - Switch between bots with separate conversations and drafts, unread indicators, cancellation, and clear-with-Undo.
 - Attach files and images in local-agent mode, or dictate through a configured Superwhisper or Voxtype backend.
 
 ```bash
-omarchy plugin add https://github.com/tcballard/omarchy-plugin-grokbot-desktop --enable
+omarchy plugin add https://github.com/ozz1ee-dev/omarchy-plugin-grokbot-desktop --enable
+cd ~/.config/omarchy/plugins/io.github.tcballard.grokbot-desktop
+git fetch
+git checkout feature/openbot-local-scripts
 ```
+
+`omarchy plugin add` clones the default branch, so check out the feature branch after adding. If you only want the upstream companion, install `https://github.com/tcballard/omarchy-plugin-grokbot-desktop` instead; the OpenBot provider is only on this fork.
 
 **Next: [sync your bots and connect replies](docs/SETUP.md).** Roster sync does not connect chat automatically. Real bot replies need a configured webhook routine and return path; local-agent mode answers in the bot's name. Conversations and drafts clear on shell restart.
 
@@ -28,7 +35,11 @@ Earlier v0.1 testing was accepted by the owner on an XPS running Omarchy `dev (5
 
 ## Agent Desktop v0.2.0
 
-GrokBot and experimental Hermes support use the [versioned provider API](docs/PROVIDER-API.md). Open **Settings → Providers** to choose GrokBot or Hermes and select an agent. Hermes connection paths can be managed there. Existing Grok settings and IDs remain valid. [Configuration and test checklist](docs/TESTING-v0.2.0.md).
+GrokBot, experimental Hermes and experimental OpenBot (Local scripts) support use the [versioned provider API](docs/PROVIDER-API.md). Open **Settings → Providers** to choose GrokBot, Hermes or OpenBot and select an agent. Hermes connection paths can be managed there. Existing Grok settings and IDs remain valid. [Configuration and test checklist](docs/TESTING-v0.2.0.md).
+
+### OpenBot on Omarchy
+
+OpenBot is experimental and available on this fork's `feature/openbot-local-scripts` branch. Add a provider entry with your SSH hop to the OpenBot host in `~/.config/omarchy/agent-desktop.json` (see [OpenBot provider](docs/OPENBOT.md)), then open **Settings → Providers → OpenBot** and press **Refresh OpenBot agents**. Only agents with **Local scripts** enabled in OpenBot appear. Show the companion with your show/hide binding (Alt+C in the example setup) or `omarchy-shell io.github.tcballard.grokbot-desktop toggleVisible`.
 
 Create a character in **Settings → Appearance → Custom avatar…**: describe it, generate a preview with your Omarchy default agent, then **Apply**. Change the description and generate again to refine the draft. Codex, Claude and Grok defaults are supported using their configured model and selected account; other agents currently retain manual JSON import. Generation is separate from chat and does not change your avatar until you apply it.
 
@@ -41,8 +52,13 @@ Product branding is Agent Desktop. The GitHub repository rename to `omarchy-plug
 Intended for Omarchy 4 (Quattro) on Hyprland. A live session on Try Omarchy (`Virtual-1`, 1280×800) is recorded in [historical acceptance evidence](docs/ACCEPTANCE-2026-10-27.json). The command to try, once you have reviewed the code, is:
 
 ```bash
-omarchy plugin add https://github.com/tcballard/omarchy-plugin-grokbot-desktop --enable
+omarchy plugin add https://github.com/ozz1ee-dev/omarchy-plugin-grokbot-desktop --enable
+cd ~/.config/omarchy/plugins/io.github.tcballard.grokbot-desktop
+git fetch
+git checkout feature/openbot-local-scripts
 ```
+
+This fork tracks the experimental OpenBot provider on `feature/openbot-local-scripts`. The upstream command (`https://github.com/tcballard/omarchy-plugin-grokbot-desktop`) installs the companion without OpenBot support.
 
 Optional launcher and close helper. Nothing copies these for you:
 
@@ -67,7 +83,7 @@ o.bind("SUPER + ALT + B", "Show or hide Grok Bot", "omarchy-shell io.github.tcba
 
 ## Use
 
-The companion sits in a corner. Clicks outside the mark pass through, and they keep passing through while the bubble is open, so you can work beside a reply. Close the bubble with its minimize button, Esc, or a click on the mark. Drag the mark anywhere on the screen. When you let go, that spot is written back to its own `plugins[]` entry as `marginX` and `marginY` from the corner chosen on the appearance page, and `monitor` is the output you dropped it on (`HDMI-A-1`, `DP-1`). The other settings in that entry are left as they were. It stays there when the shell starts again, and it does not follow the pointer between monitors. That corner also decides which way the bubble and the menu open first. Hold Super to move it without opening the bubble: the drag starts as soon as you press, and letting go never opens the bubble. Without Super, the drag starts once the pointer has moved a few pixels, and a click opens the bubble. The sliders button in the bubble, Right-click > Settings, or `settings` opens a wider settings view with a persistent category sidebar. Choose Providers to manage GrokBot/Hermes, Appearance for shapes and colours, or Behaviour for motion and placement. The close button returns to chat; the custom-avatar back button returns to Appearance. The appearance page is laid out like Grok Bot's avatar picker: its fourteen shapes in the chosen colour with a ring around the current one, its eleven colours plus the Omarchy theme accent, and Reset to default, which goes back to the bot's own look.
+The companion sits in a corner. Clicks outside the mark pass through, and they keep passing through while the bubble is open, so you can work beside a reply. Close the bubble with its minimize button, Esc, or a click on the mark. Drag the mark anywhere on the screen. When you let go, that spot is written back to its own `plugins[]` entry as `marginX` and `marginY` from the corner chosen on the appearance page, and `monitor` is the output you dropped it on (`HDMI-A-1`, `DP-1`). The other settings in that entry are left as they were. It stays there when the shell starts again, and it does not follow the pointer between monitors. That corner also decides which way the bubble and the menu open first. Hold Super to move it without opening the bubble: the drag starts as soon as you press, and letting go never opens the bubble. Without Super, the drag starts once the pointer has moved a few pixels, and a click opens the bubble. The sliders button in the bubble, Right-click > Settings, or `settings` opens a wider settings view with a persistent category sidebar. Choose Providers to manage GrokBot/Hermes/OpenBot, Appearance for shapes and colours, or Behaviour for motion and placement. The close button returns to chat; the custom-avatar back button returns to Appearance. The appearance page is laid out like Grok Bot's avatar picker: its fourteen shapes in the chosen colour with a ring around the current one, its eleven colours plus the Omarchy theme accent, and Reset to default, which goes back to the bot's own look.
 
 | Action | Result |
 | --- | --- |

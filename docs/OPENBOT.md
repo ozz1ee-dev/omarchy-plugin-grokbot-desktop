@@ -1,9 +1,29 @@
 # OpenBot provider
 
-Status: experimental Local scripts adapter. The provider id is `openbot`; it is
+Status: working experimental adapter, verified on Omarchy against a self-hosted
+OpenBot host reached through an SSH hop. The provider id is `openbot`; it is
 selectable in Settings next to GrokBot and Hermes once the provider entry exists
-in `~/.config/omarchy/agent-desktop.json`. Live validation against the self-hosted
-host is still a manual step.
+in `~/.config/omarchy/agent-desktop.json`.
+
+## Setup
+
+1. In OpenBot, enable **Local scripts** on each agent you want on the desktop.
+   Agents without it do not appear in the roster.
+2. Write the provider entry to `~/.config/omarchy/agent-desktop.json`. Start from
+   the [transport hop](#transport-hop) example below and adjust the SSH host and
+   container for your installation. `hop` and `timeoutSeconds` are optional.
+3. Test discovery from the plugin directory:
+
+   ```bash
+   ./bin/openbot-local-scripts agents
+   ```
+
+4. Open **Settings → Providers → OpenBot** and press **Refresh OpenBot agents**.
+   Pick an agent, then show the companion with your show/hide binding (Alt+C in
+   the example setup) or `omarchy-shell io.github.tcballard.grokbot-desktop toggleVisible`.
+
+The [Provider API v1](PROVIDER-API.md) contract is unchanged; OpenBot is another
+adapter behind it.
 
 ## What it does
 
@@ -35,7 +55,8 @@ so `request.cancel` returns `status:"unsupported"` with
 ## Transport hop
 
 The plugin host reaches the Local scripts listener through a configurable shell
-hop. The default is:
+hop. The default below is the example used for development; customize the SSH
+host, container runtime and container name for your OpenBot installation:
 
 ```text
 ssh -o BatchMode=yes -o ConnectTimeout=8 ovhlab pct exec 149 -- docker exec -i openbot bash -lc
@@ -79,8 +100,8 @@ message on HTTP or transport failure.
 
 The Local scripts avatar route returns 404, so this adapter does not sync OpenBot
 photos. Agents use `avatarShape:"blob"` and a stable `avatarColor` chosen from the
-existing palette by hashing the agent id and name. Full OpenBot photos need the
-Team API later; until then, do not expect the picture from the OpenBot app.
+existing palette by hashing the agent id and name. The Local scripts API exposes
+no working avatar route, so do not expect the picture from the OpenBot app.
 
 ## Open Bot Avatar is not OpenBot
 

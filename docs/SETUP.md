@@ -5,9 +5,13 @@ The companion targets Omarchy 4 with Hyprland and Quickshell. It needs Python 3 
 ## 1. Install and show the companion
 
 ```bash
-omarchy plugin add https://github.com/tcballard/omarchy-plugin-grokbot-desktop --enable
+omarchy plugin add https://github.com/ozz1ee-dev/omarchy-plugin-grokbot-desktop --enable
 cd ~/.config/omarchy/plugins/io.github.tcballard.grokbot-desktop
+git fetch
+git checkout feature/openbot-local-scripts
 ```
+
+`omarchy plugin add` clones the default branch, so check out the feature branch after adding. To use the upstream companion without OpenBot, install `https://github.com/tcballard/omarchy-plugin-grokbot-desktop` instead.
 
 If you have updated an existing installation and still see the old UI, run `omarchy restart shell`. Restarting clears the companion's in-memory conversations and waiting questions.
 
@@ -80,6 +84,23 @@ bin/grokbot-connect --off
 ```
 
 Files and images work only in local-agent mode. Webhook mode currently refuses attachments.
+
+## OpenBot (experimental)
+
+This fork adds an experimental OpenBot provider using OpenBot's Local scripts API. Enable **Local scripts** on each agent in OpenBot, then add the provider to `~/.config/omarchy/agent-desktop.json`:
+
+```json
+{
+  "providers": {
+    "openbot": {
+      "hop": "ssh -o BatchMode=yes ovhlab pct exec 149 -- docker exec -i openbot bash -lc",
+      "timeoutSeconds": 180
+    }
+  }
+}
+```
+
+The hop above is the development example; customize the SSH host and container for your OpenBot installation. Then open **Settings → Providers → OpenBot** and press **Refresh OpenBot agents**. Only agents with Local scripts enabled appear. If the roster stays empty, test the hop with `bin/openbot-local-scripts agents`. See [OpenBot provider](OPENBOT.md) for the transport details and limits.
 
 ## 4. Optional show/hide shortcut
 
