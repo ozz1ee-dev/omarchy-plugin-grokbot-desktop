@@ -48,6 +48,13 @@ capture('settings')
 click('Appearance')
 assert root.property('settingsSection') == 'appearance'
 capture('appearance')
+click('Selected workspace')
+assert root.property('workspaceMode') == 'selected'
+click('Workspace 2')
+assert root.property('workspaceNumber') == 2
+capture('workspace')
+click('All workspaces')
+assert root.property('workspaceMode') == 'all'
 click('Behaviour')
 click('Hyper')
 assert root.property('motionName') == 'hyper'
